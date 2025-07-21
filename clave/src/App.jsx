@@ -1,3 +1,4 @@
+// App.jsx
 import { useEffect, useState } from "react";
 import { generateSecret } from "./utils/generateSecret";
 import GuessRow from "./components/GuessRow";
@@ -41,24 +42,51 @@ export default function App() {
     }
   };
 
+  const handleInputChange = (e) => {
+    const val = e.target.value.replace(/\D/g, "").slice(0, 6);
+    if (new Set(val).size === val.length) {
+      setCurrentGuess(val);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSubmit();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-200 via-blue-200 to-yellow-100 flex flex-col items-center justify-center p-4">
       <div className="bg-white/80 rounded-3xl shadow-2xl p-8 max-w-lg w-full border-4 border-blue-300 animate-fade-in">
         <h1 className="text-4xl font-extrabold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-blue-500 to-yellow-500 drop-shadow-lg animate-bounce">
           🗝️ Caja Fuerte
         </h1>
-        <div className="grid gap-4">
+
+        {/* Las filas del juego */}
+        <div className="grid gap-4 mb-6">
           {Array.from({ length: 5 }).map((_, i) => (
             <GuessRow
               key={i}
               guess={guesses[i]}
-              isCurrent={!gameOver && i === guesses.length}
-              currentGuess={currentGuess}
-              setCurrentGuess={setCurrentGuess}
-              onEnter={handleSubmit}
+              currentGuess={i === guesses.length ? currentGuess : ""}
             />
           ))}
         </div>
+
+        {/* Input del usuario */}
+        {!gameOver && (
+          <input
+            type="text"
+            inputMode="numeric"
+            autoFocus
+            value={currentGuess}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            maxLength={6}
+            className="block w-full text-center text-2xl tracking-widest border-2 border-blue-400 rounded-xl px-4 py-2 mb-2 outline-none focus:ring-4 focus:ring-blue-300 transition-all"
+            placeholder="Introduce 6 dígitos únicos"
+          />
+        )}
 
         {gameOver && (
           <div className="text-center mt-6">
@@ -86,6 +114,7 @@ export default function App() {
           </div>
         )}
       </div>
+
       <style>
         {`
         .animate-fade-in {
