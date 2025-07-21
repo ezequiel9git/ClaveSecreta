@@ -42,32 +42,70 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      <h1 className="text-3xl font-bold text-center mb-4">Caja Fuerte</h1>
-      <div className="grid gap-2 max-w-md mx-auto">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <GuessRow
-            key={i}
-            guess={guesses[i]}
-            isCurrent={!gameOver && i === guesses.length}
-            currentGuess={currentGuess}
-            setCurrentGuess={setCurrentGuess}
-            onEnter={handleSubmit}
-          />
-        ))}
-      </div>
-
-      {gameOver && (
-        <div className="text-center mt-4">
-          {guesses[guesses.length - 1]?.feedback?.every((f) => f === "green") ? (
-            <p className="text-green-600 font-bold">¡Correcto! 🎉</p>
-          ) : (
-            <p className="text-red-600 font-bold">
-              Fallaste. La clave era: {secret.join("")}
-            </p>
-          )}
+    <div className="min-h-screen bg-gradient-to-br from-pink-200 via-blue-200 to-yellow-100 flex flex-col items-center justify-center p-4">
+      <div className="bg-white/80 rounded-3xl shadow-2xl p-8 max-w-lg w-full border-4 border-blue-300 animate-fade-in">
+        <h1 className="text-4xl font-extrabold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-blue-500 to-yellow-500 drop-shadow-lg animate-bounce">
+          🗝️ Caja Fuerte
+        </h1>
+        <div className="grid gap-4">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <GuessRow
+              key={i}
+              guess={guesses[i]}
+              isCurrent={!gameOver && i === guesses.length}
+              currentGuess={currentGuess}
+              setCurrentGuess={setCurrentGuess}
+              onEnter={handleSubmit}
+            />
+          ))}
         </div>
-      )}
+
+        {gameOver && (
+          <div className="text-center mt-6">
+            {guesses[guesses.length - 1]?.feedback?.every((f) => f === "green") ? (
+              <p className="text-green-600 font-extrabold text-2xl animate-pulse">
+                ¡Correcto! 🎉
+              </p>
+            ) : (
+              <div>
+                <p className="text-red-600 font-extrabold text-2xl animate-shake">
+                  Fallaste. La clave era:
+                </p>
+                <div className="flex justify-center gap-2 mt-2">
+                  {secret.map((d, i) => (
+                    <span
+                      key={i}
+                      className="bg-gradient-to-br from-pink-400 via-blue-400 to-yellow-300 text-white rounded-lg px-3 py-1 text-xl font-bold shadow"
+                    >
+                      {d}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+      <style>
+        {`
+        .animate-fade-in {
+          animation: fadeIn 1s ease;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: scale(0.95);}
+          to { opacity: 1; transform: scale(1);}
+        }
+        .animate-shake {
+          animation: shake 0.5s;
+        }
+        @keyframes shake {
+          10%, 90% { transform: translateX(-2px);}
+          20%, 80% { transform: translateX(4px);}
+          30%, 50%, 70% { transform: translateX(-8px);}
+          40%, 60% { transform: translateX(8px);}
+        }
+      `}
+      </style>
     </div>
   );
 }

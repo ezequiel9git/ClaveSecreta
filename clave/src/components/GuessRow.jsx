@@ -39,9 +39,10 @@ export default function GuessRow({
           value={currentGuess}
           onChange={handleChange}
           onKeyDown={(e) => e.key === "Enter" && onEnter()}
-          className="sr-only"
-          autoFocus
+          className="mt-2 p-2 border border-gray-400 rounded w-full text-center text-xl tracking-widest"
+          placeholder="Ingresa 6 dígitos únicos"
         />
+
       )}
     </div>
   );
